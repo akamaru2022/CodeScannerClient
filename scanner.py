@@ -2,6 +2,7 @@ import sys, getopt
 import socket
 from datetime import datetime
 import logging
+import json
 
 class Repository:
     TIMEOUT=3
@@ -12,13 +13,19 @@ class Repository:
         self.__port = int(port)
 
     def save(self, code):
-        data = self.__deviceID + ':' + code
-        logging.info(data)
+        data = {
+            'DeviceID': self.__deviceID,
+            'ScanTime': '{:%Y-%m-%d %H-%M-%S}'.format(datetime.now()),
+            'Code': code
+            }
+        dataStr = json.dumps(data)
+        logging.info(dataStr)
+
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(self.TIMEOUT)
         try:
             s.connect((self.__host, self.__port))
-            s.send(data.encode())
+            s.send(dataStr.encode())
             res = s.recv(1024)
             return res.decode()
         except ConnectionRefusedError as cre:
