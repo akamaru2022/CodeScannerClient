@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import socket
+import time
 
 HOST = '127.0.0.1'
 PORT = 1234
@@ -19,6 +20,7 @@ while True:
 
     while True:
         indata = conn.recv(1024)
+        # time.sleep(5)
         if len(indata) == 0: # connection closed
             conn.close()
             print('client closed connection.')
