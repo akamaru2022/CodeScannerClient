@@ -1,3 +1,3 @@
 ## TODO
-- heartbeat
-- regular time to archive log
+- log file management
+- raspberrypi action
