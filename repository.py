@@ -4,6 +4,8 @@ import time
 import json
 import logging
 
+logger = logging.getLogger('scanner')
+
 class Repository:
     RETRY = 3
     TIMEOUT = 1
@@ -31,23 +33,23 @@ class Repository:
         dataStr = json.dumps(data)
 
         i = 0
-        while (i < self.RETRY):
-            i = i+1
+        while (i <= self.RETRY):
             try:
                 send = self.s.send(dataStr.encode())
                 if(send > 0):
-                    logging.info(dataStr)
+                    logger.info(dataStr)
                 res = self.s.recv(1024)
                 return res.decode()
-            except ConnectionResetError as cre:
-                logging.exception('Connection Reset Error-> %s, try reconnection', self.iport)
-            except ConnectionRefusedError as cre:
-                logging.exception('Connection Refused Error-> %s', self.iport)
-            except socket.timeout:
-                logging.exception('Connection Timeout-> %s', self.iport)
+            # except ConnectionResetError as cre:
+            #     logger.exception('Connection Reset Error-> %s, try reconnection', self.iport)
+            # except ConnectionRefusedError as cre:
+            #     logger.exception('Connection Refused Error-> %s', self.iport)
+            # except socket.timeout:
+            #     logger.exception('Connection Timeout-> %s', self.iport)
             except socket.error :
-                logging.exception('Socket Error-> %s', self.iport)
+                logger.exception('Socket Error-> %s, retry(%d), content->\n%s', self.iport, i, dataStr)
+                i = i+1
                 time.sleep(1)
                 self.connect()
             except Exception as e:
-                logging.exception(e)
+                logger.exception(e)
