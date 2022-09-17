@@ -7,6 +7,8 @@ import os
 from repository import Repository
 
 HINT = 'scanner.py -d <deviceID> -i <serverIP> -p <serverPort>'
+SUCCESS = '200'
+FAILED = '500'
 
 def initLogger():
     logFolder = os.path.join(os.path.abspath('log'))
@@ -55,6 +57,12 @@ def initService(argv):
             port = arg
     return (deviceID, ip, port)
 
+def saveSuccess():
+    print('success!!!')
+
+def saveFailed():
+    print('failed!!!')
+
 def main(argv):
 
     initLogger()
@@ -65,7 +73,11 @@ def main(argv):
     while True:
         outdata = input('scan... ')
         response = repository.save(outdata)
-        print(response)
+        if(response == SUCCESS):
+            saveSuccess()
+        else:
+            saveFailed()
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
