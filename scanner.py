@@ -3,6 +3,7 @@ import sys, getopt
 import logging
 import logging.handlers
 import os
+import configparser
 
 from repository import Repository
 
@@ -37,14 +38,18 @@ def initLogger():
     logger.addHandler(logHandler)
 
 def initService(argv):
+
+    config = configparser.RawConfigParser()
+    config.read('.properties')
+
     try:
         opts, args = getopt.getopt(argv,"hd:i:p:",["deviceID=","serverIP=","serverPort="])
     except getopt.GetoptError:
         print(HINT)
         sys.exit(2)
-    deviceID = 'Lobby'
-    ip = '127.0.0.1'
-    port = '1234'
+    deviceID = config.get('Device', 'ID')
+    ip = config.get('Service', 'IP')
+    port = config.get('Service', 'Port')
     for opt, arg in opts:
         if opt == '-h':
             print(HINT)
