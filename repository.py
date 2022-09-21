@@ -20,8 +20,12 @@ class Repository:
         try :
             self.s.settimeout(self.TIMEOUT)
             self.s.connect(self.iport)
-        except :
-            pass
+            print(self.deviceID + ' connect to ' + self.iport[0] + ':' + str(self.iport[1]))
+        except Exception as e:
+            print(self.deviceID + ' failed connect to ' + self.iport[0] + ':' + str(self.iport[1]))
+            logger.exception(e)
+            raise e
+            # pass
 
     def save(self, code):
         scanTime = '{:%Y-%m-%d %H-%M-%S}'.format(datetime.now())
