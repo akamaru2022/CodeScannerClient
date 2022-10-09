@@ -52,3 +52,5 @@ Thumbs.db
 /.vs/CodeScannerClient/FileContentIndex/3e1b14e7-e56a-45a2-aff7-cd10c32e7eff.vsidx
 /.vs/CodeScannerClient
 /.vs
+
+.properties
