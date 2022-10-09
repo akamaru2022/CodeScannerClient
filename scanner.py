@@ -38,9 +38,20 @@ def initLogger():
     logger.addHandler(logHandler)
 
 def initService(argv):
+    
+    logger = logging.getLogger('scanner')
 
-    config = configparser.RawConfigParser()
-    config.read('.properties')
+    try:
+        currentFolder = os.path.dirname(os.path.abspath(__file__))
+        propertiesFile = os.path.join(currentFolder, '.properties')
+        config = configparser.RawConfigParser()
+        config.read(propertiesFile)
+        deviceID = config.get('Device', 'ID')
+        ip = config.get('Service', 'IP')
+        port = config.get('Service', 'Port')
+    except Exception as e:
+        logger.e(e)
+        pass
 
     try:
         opts, args = getopt.getopt(argv,"hd:i:p:",["deviceID=","serverIP=","serverPort="])
