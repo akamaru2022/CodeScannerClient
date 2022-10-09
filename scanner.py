@@ -4,12 +4,21 @@ import logging
 import logging.handlers
 import os
 import configparser
+import RPi.GPIO as GPIO
+import time
 
 from repository import Repository
 
 HINT = 'scanner.py -d <deviceID> -i <serverIP> -p <serverPort>'
 SUCCESS = '200'
 FAILED = '500'
+
+blue = 12
+orange = 18
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(orange, GPIO.OUT)
+GPIO.setup(blue, GPIO.OUT)
 
 def initLogger():
     logFolder = os.path.join(os.path.abspath('log'))
@@ -38,7 +47,7 @@ def initLogger():
     logger.addHandler(logHandler)
 
 def initService(argv):
-    
+
     logger = logging.getLogger('scanner')
 
     try:
@@ -72,9 +81,13 @@ def initService(argv):
     return (deviceID, ip, port)
 
 def saveSuccess():
+    GPIO.output(orange, False)
+    GPIO.output(blue, True)
     print('success!!!')
 
 def saveFailed():
+    GPIO.output(blue, False)
+    GPIO.output(orange, True)
     print('failed!!!')
 
 def main(argv):
