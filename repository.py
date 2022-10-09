@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger('scanner')
 
 class Repository:
-    RETRY = 3
+    RETRY = 1
     TIMEOUT = 1
 
     def __init__(self, deviceID, host, port):
@@ -24,11 +24,11 @@ class Repository:
         except Exception as e:
             print(self.deviceID + ' failed connect to ' + self.iport[0] + ':' + str(self.iport[1]))
             logger.exception(e)
-            raise e
+            #raise e
             # pass
 
     def save(self, code):
-        scanTime = '{:%Y-%m-%d %H-%M-%S}'.format(datetime.now())
+        scanTime = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.now())
         data = {
             'DeviceID': self.deviceID,
             'ScanTime': scanTime,
