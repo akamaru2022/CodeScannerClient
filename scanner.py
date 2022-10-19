@@ -15,10 +15,13 @@ FAILED = '500'
 
 blue = 12
 orange = 18
+sound = 37
+piano = 1000
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(orange, GPIO.OUT)
 GPIO.setup(blue, GPIO.OUT)
+GPIO.setup(sound, GPIO.OUT)
 
 def initLogger():
     logFolder = os.path.join(os.path.abspath('log'))
@@ -66,7 +69,7 @@ def initService(argv):
         opts, args = getopt.getopt(argv,"hd:i:p:",["deviceID=","serverIP=","serverPort="])
     except getopt.GetoptError:
         print(HINT)
-        sys.exit(2)
+        sys.exit(1)
 
     for opt, arg in opts:
         if opt == '-h':
@@ -89,6 +92,16 @@ def saveFailed():
     GPIO.output(blue, False)
     GPIO.output(orange, True)
     print('failed!!!')
+    play(piano, 1)
+
+def play(pitch, sec):
+    half_pitch = (1 / pitch) / 2
+    t = int(pitch * sec)
+    for i in range(t):
+        GPIO.output(sound, GPIO.HIGH)
+        time.sleep(half_pitch)
+        GPIO.output(sound, GPIO.LOW)
+        time.sleep(half_pitch)
 
 def main(argv):
 
